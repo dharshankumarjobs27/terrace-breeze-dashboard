@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark"><meta name="theme-color" content="#16171b"><title>Terrace Breeze — Competitor Price Monitor</title><style>
+:root{color-scheme:dark;--bg:#16171b;--bg2:#1f2026;--text:#f5f5f7;--sub:rgba(235,235,245,.58);--glass:rgba(58,58,66,.42);--glass2:rgba(90,90,100,.45);--edge:rgba(255,255,255,.14);--blue:#0a84ff;--blue2:#2f6cf0;--green:#30d158;--red:#ff375f;--orange:#ff9f0a;--track:rgba(120,120,128,.28)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;
+background:radial-gradient(1200px 600px at 10% -10%,#2a2c36 0%,transparent 60%),radial-gradient(900px 500px at 110% 30%,#24262f 0%,transparent 60%),linear-gradient(180deg,var(--bg2),var(--bg));background-attachment:fixed}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1180px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 130px}
+.glass{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015)),var(--glass);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);border-radius:26px;
+box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px var(--edge),inset 0 -10px 24px rgba(255,255,255,.025),0 18px 40px -12px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.3)}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+background:linear-gradient(120deg,rgba(255,80,160,.55),rgba(255,200,80,.0) 22%,rgba(255,255,255,0) 60%,rgba(80,170,255,.5) 85%,rgba(120,255,200,.45));
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55}
+header{padding:26px 4px 6px}.eyebrow{font-size:13px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.05em}
+h1{font-size:34px;line-height:1.1;font-weight:700;letter-spacing:-.02em;margin:4px 0 2px}header p{margin:0;font-size:17px;color:var(--sub)}
+h2{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:26px 4px 12px}
+.segc{display:flex;padding:4px;border-radius:999px;gap:2px;margin:18px 0 6px}
+.segc button{flex:1;padding:9px 12px;border-radius:999px;font-size:15px;font-weight:600;color:var(--sub);transition:background .25s,color .25s,box-shadow .25s}
+.segc button.active{color:var(--text);background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.08));box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 0 0 1px rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.45)}
+.segc.small button{font-size:13px;padding:8px 6px}
+.tab{display:none;animation:fade .3s ease}.tab.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tile{padding:15px 16px;display:flex;flex-direction:column;gap:3px;min-width:0;border-radius:22px}.tl{font-size:13px;color:var(--sub);font-weight:500}.tv{font-size:24px;font-weight:700;letter-spacing:-.02em;overflow-wrap:anywhere}.tile:last-child .tv{font-size:16px;line-height:1.3}.ts{font-size:12px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.panel{padding:16px 18px}
+.bars{display:flex;flex-direction:column;gap:14px}.bl{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:6px}.bl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--sub)}
+.track{height:10px;border-radius:999px;background:var(--track);overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#5e5ce6,var(--blue));box-shadow:0 0 12px rgba(10,132,255,.6)}
+.bar.me .fill{background:linear-gradient(90deg,#ff9f0a,#ff375f);box-shadow:0 0 12px rgba(255,55,95,.6)}.bar.me .bl span{color:var(--text);font-weight:700}
+.vs{display:flex;flex-direction:column}.vsrow{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:15px}.vsrow:last-child{border:0}.vsrow span{color:var(--sub)}
+.up{color:var(--green)!important}.down{color:var(--red)!important}
+.tools{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.sortbtn{align-self:flex-start;display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600}
+.sortbtn .tg{width:42px;height:24px;border-radius:999px;background:rgba(120,120,128,.4);position:relative;transition:background .25s}.sortbtn .tg::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.4);transition:transform .25s}
+.sortbtn[aria-pressed=true] .tg{background:var(--green)}.sortbtn[aria-pressed=true] .tg::after{transform:translateX(18px)}
+.count{font-size:13px;color:var(--sub);margin:0 4px 10px}
+.cards{display:grid;grid-template-columns:1fr;gap:12px}
+.card{padding:18px;display:flex;flex-direction:column;gap:8px}.card.me{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1.5px rgba(10,132,255,.8),0 0 30px -6px rgba(10,132,255,.55),0 18px 40px -12px rgba(0,0,0,.6)}
+.card.hide{display:none}
+.row{display:flex;justify-content:space-between;gap:10px}.tt{min-width:0}
+h3{margin:0;font-size:17px;font-weight:600;line-height:1.25}.sub{margin:2px 0 0;font-size:14px;color:var(--sub)}
+.pills{display:flex;gap:6px;flex-shrink:0;align-items:flex-start}.pill{font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.pill.ok{background:rgba(48,209,88,.18);color:var(--green)}.pill.warn{background:rgba(255,159,10,.18);color:var(--orange)}.pill.you{background:var(--blue);color:#fff}
+.price{font-size:32px;font-weight:700;letter-spacing:-.02em}.price small{font-size:14px;font-weight:500;color:var(--sub)}.price.na{font-size:22px;color:var(--sub)}
+.night{font-size:12px;color:var(--sub);margin-top:-6px}
+.diff{font-size:15px;font-weight:600}.diff small{font-weight:500;opacity:.8}.diff.up{color:var(--green)}.diff.down{color:var(--red)}.diff.muted{color:var(--sub)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--sub)}.meta b{color:var(--text);font-weight:600}.meta .n{opacity:.7}
+.btn{margin-top:6px;display:block;text-align:center;text-decoration:none;font-weight:600;font-size:16px;padding:13px;border-radius:999px;transition:transform .15s,filter .15s}
+.btn.primary{color:#fff;background:linear-gradient(180deg,#3d8bff,var(--blue2));box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px -6px rgba(10,132,255,.7)}.btn:hover{filter:brightness(1.1)}.btn:active{transform:scale(.97)}
+.alerts{list-style:none;margin:0;padding:4px 18px}.alerts li{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:15px}.alerts li:last-child{border:0}.alerts small{color:var(--sub)}.alerts time{color:var(--sub);font-size:13px;white-space:nowrap}
+.empty{padding:34px 20px;text-align:center}.empty p{margin:10px 0 4px;font-size:17px;font-weight:600}.empty small{color:var(--sub);font-size:13px}
+.eico{width:54px;height:54px;margin:0 auto;border-radius:50%;display:grid;place-items:center;font-size:24px;color:#fff;background:linear-gradient(180deg,#3d8bff,var(--blue2));box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px -6px rgba(10,132,255,.7)}
+footer{margin-top:26px;padding:18px;font-size:13px;color:var(--sub);line-height:1.55}footer b{color:var(--text);font-weight:600}footer p{margin:4px 0}
+.tabbar{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:4px;padding:6px;border-radius:999px;z-index:10;width:min(360px,calc(100% - 32px))}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px;border-radius:999px;font-size:11px;font-weight:600;color:var(--sub);position:relative;transition:background .25s,color .25s}
+.tb svg{width:24px;height:24px;fill:currentColor}.tb.active{color:var(--red);background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.08)}
+.badge{position:absolute;top:2px;right:22%;font-style:normal;font-size:10px;background:var(--red);color:#fff;border-radius:999px;padding:1px 6px}
+@media (min-width:700px){h1{font-size:40px}.tiles{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(2,1fr)}.wrap{padding:24px 28px 130px}.segc.top{max-width:420px}.tools{flex-direction:row;align-items:center;justify-content:space-between}.tools .segc{flex:1;max-width:560px;margin:0}}
+@media (min-width:1050px){.tiles{grid-template-columns:repeat(6,1fr)}.cards{grid-template-columns:repeat(3,1fr)}.ovgrid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:start}}
+</style></head>
+<body><div class="wrap">
+<header><div class="eyebrow">Monitoring every night through 30 Dec 2026 · 2 adults</div><h1>Terrace Breeze</h1><p>Competitor Price Monitor</p></header>
+<nav class="glass segc top" role="tablist"><button class="sg" data-tab="overview" role="tab">Overview</button><button class="sg" data-tab="listings" role="tab">Listings</button><button class="sg" data-tab="alerts" role="tab">Alerts</button></nav>
+<section class="tab" id="tab-overview">
+ <h2>Summary</h2><div class="tiles"><div class="glass tile"><span class="tl">Your price</span><span class="tv">₹1,848</span><span class="ts">for Sat 14 Nov</span></div><div class="glass tile"><span class="tl">Competitors avg</span><span class="tv">₹2,042</span><span class="ts">6 verified</span></div><div class="glass tile"><span class="tl">Cheapest competitor</span><span class="tv">₹1,600</span><span class="ts">Shri Mahameru Nivas</span></div><div class="glass tile"><span class="tl">Monitored</span><span class="tv">8</span><span class="ts">listings</span></div><div class="glass tile"><span class="tl">Unavailable</span><span class="tv">1</span><span class="ts">not verified</span></div><div class="glass tile"><span class="tl">Last check</span><span class="tv">14 Oct 2026, 09:05 PM IST</span><span class="ts">baseline_imported</span></div></div>
+ <div class="ovgrid"><div><h2>Price comparison</h2><div class="glass panel bars"><div class="bar me"><div class="bl"><span>Terrace Breeze Stay Tiruvannamalai</span><b>₹1,848</b></div><div class="track"><div class="fill" style="width:74%"></div></div></div><div class="bar"><div class="bl"><span>Shri Mahameru Nivas</span><b>₹1,600</b></div><div class="track"><div class="fill" style="width:64%"></div></div></div><div class="bar"><div class="bl"><span>Arasan Homestay Balcony Mountain view</span><b>₹1,700</b></div><div class="track"><div class="fill" style="width:68%"></div></div></div><div class="bar"><div class="bl"><span>Paddy&#x27;s Home Rudra</span><b>₹2,066</b></div><div class="track"><div class="fill" style="width:83%"></div></div></div><div class="bar"><div class="bl"><span>Anbu home stay A/C Entire 2BHK</span><b>₹2,185</b></div><div class="track"><div class="fill" style="width:87%"></div></div></div><div class="bar"><div class="bl"><span>Addy&#x27;s Home</span><b>₹2,200</b></div><div class="track"><div class="fill" style="width:88%"></div></div></div><div class="bar"><div class="bl"><span>Sri Krishna Palace</span><b>₹2,500</b></div><div class="track"><div class="fill" style="width:100%"></div></div></div><div class="bar"><div class="bl"><span>Tatt Satt Home</span><b>Unavailable</b></div><div class="track"><div class="fill" style="width:0%"></div></div></div></div></div>
+ <div><h2>You vs competitors</h2><div class="glass panel"><div class="vs">
+ <div class="vsrow"><span>Your price</span><b>₹1,848</b></div>
+ <div class="vsrow"><span>vs competitor average</span><b class="up">−₹194</b></div>
+ <div class="vsrow"><span>Price rank (1 = cheapest)</span><b>3 of 7</b></div>
+ <div class="vsrow"><span>Competitors cheaper / pricier</span><b><span class="down">2</span> / <span class="up">4</span></b></div>
+</div></div></div></div>
+</section>
+<section class="tab" id="tab-listings">
+ <h2>Listings</h2>
+ <div class="tools"><div class="glass segc small" id="filters"><button data-filter="all" class="active" aria-pressed="true">All</button><button data-filter="cheaper" class="" aria-pressed="false">Cheaper than you</button><button data-filter="pricier" class="" aria-pressed="false">Pricier</button><button data-filter="unavailable" class="" aria-pressed="false">Unavailable</button></div>
+ <button class="glass sortbtn" id="sort" aria-pressed="false"><span class="tg"></span><span class="lbl">Price: low → high</span></button></div>
+ <p class="count" id="count"></p>
+ <div class="cards" id="cards"><article class="glass card me" data-cat="me" data-price="1848" data-name="Terrace Breeze Stay Tiruvannamalai">
+ <div class="row top"><div class="tt"><h3>Terrace Breeze Stay Tiruvannamalai</h3><p class="sub">Private room in home</p></div><div class="pills"><span class="pill you">You</span><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹1,848<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ 
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹1,848</b></span><span>high <b>₹1,848</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1645715884554896721" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="pricier" data-price="2185" data-name="Anbu home stay A/C Entire 2BHK">
+ <div class="row top"><div class="tt"><h3>Anbu home stay A/C Entire 2BHK</h3><p class="sub">Entire home</p></div><div class="pills"><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹2,185<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ <div class="diff up">+₹337 <small>pricier than you</small></div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹2,185</b></span><span>high <b>₹2,185</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1512763665139017609" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="pricier" data-price="2200" data-name="Addy&#x27;s Home">
+ <div class="row top"><div class="tt"><h3>Addy&#x27;s Home</h3><p class="sub">Entire home</p></div><div class="pills"><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹2,200<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ <div class="diff up">+₹352 <small>pricier than you</small></div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹2,200</b></span><span>high <b>₹2,200</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1426635045787036195" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="unavailable" data-price="" data-name="Tatt Satt Home">
+ <div class="row top"><div class="tt"><h3>Tatt Satt Home</h3><p class="sub">Entire home</p></div><div class="pills"><span class="pill warn">Unavailable</span></div></div>
+ <div class="price na">Unavailable<small></small></div>
+ <div class="night"></div>
+ <div class="diff muted">No verified price to compare</div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed: <b>—</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1170601351166649951" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="pricier" data-price="2500" data-name="Sri Krishna Palace">
+ <div class="row top"><div class="tt"><h3>Sri Krishna Palace</h3><p class="sub">Entire home</p></div><div class="pills"><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹2,500<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ <div class="diff up">+₹652 <small>pricier than you</small></div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹2,500</b></span><span>high <b>₹2,500</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1188433997611842289" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="cheaper" data-price="1700" data-name="Arasan Homestay Balcony Mountain view">
+ <div class="row top"><div class="tt"><h3>Arasan Homestay Balcony Mountain view</h3><p class="sub">Private room</p></div><div class="pills"><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹1,700<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ <div class="diff down">−₹148 <small>cheaper than you</small></div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹1,700</b></span><span>high <b>₹1,700</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1523955549471813390" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="pricier" data-price="2066" data-name="Paddy&#x27;s Home Rudra">
+ <div class="row top"><div class="tt"><h3>Paddy&#x27;s Home Rudra</h3><p class="sub">Entire rental unit</p></div><div class="pills"><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹2,066<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ <div class="diff up">+₹218 <small>pricier than you</small></div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹2,066</b></span><span>high <b>₹2,066</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1528327492826101214" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article><article class="glass card" data-cat="cheaper" data-price="1600" data-name="Shri Mahameru Nivas">
+ <div class="row top"><div class="tt"><h3>Shri Mahameru Nivas</h3><p class="sub">Entire home</p></div><div class="pills"><span class="pill ok">Verified</span></div></div>
+ <div class="price">₹1,600<small> / night</small></div>
+ <div class="night">for Sat 14 Nov · checked 14 Oct 2026, 09:05 PM IST</div>
+ <div class="diff down">−₹248 <small>cheaper than you</small></div>
+ <div class="meta"><span>Next 30 nights: <b>no data yet</b></span></div><div class="meta"><span>Observed low <b>₹1,600</b></span><span>high <b>₹1,600</b></span></div>
+ <a class="btn primary" href="https://www.airbnb.com/rooms/1265951727043540916" target="_blank" rel="noopener noreferrer">Open listing</a>
+</article></div>
+</section>
+<section class="tab" id="tab-alerts"><h2>Recent alerts</h2><div class="glass"><div class="empty"><div class="eico">✓</div><p>No price changes yet</p><small>Alerts appear here when a price moves by the thresholds below.</small></div></div></section>
+<footer class="glass">
+<p><b>Monitoring:</b> every night through 31 Dec 2026 (1-night stays, 2 adults), checked daily at 9:05 AM IST.</p>
+<p><b>Alert thresholds:</b> change of at least ₹1 or 0%.</p>
+<p>Prices come from public Airbnb listing pages. “Unavailable” means the price could not be verified — prices are never estimated.</p>
+<p>Generated 14 Oct 2026, 10:02 PM IST</p>
+</footer></div>
+<nav class="glass tabbar" role="tablist"><button class="tb" data-tab="overview" role="tab"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Overview</span></button><button class="tb" data-tab="listings" role="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg><span>Listings</span></button><button class="tb" data-tab="alerts" role="tab"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6zm-2 15a2 2 0 0 0 4 0z"/></svg><span>Alerts</span></button></nav>
+<script>
+(function(){
+ var TABS=['overview','listings','alerts'];
+ function show(t,push){ if(TABS.indexOf(t)<0)t='overview';
+  document.querySelectorAll('.tab').forEach(function(s){var on=s.id==='tab-'+t;s.classList.toggle('active',on);s.hidden=!on;});
+  document.querySelectorAll('[data-tab]').forEach(function(b){var on=b.dataset.tab===t;b.classList.toggle('active',on);b.setAttribute('aria-selected',on);});
+  if(push&&location.hash!=='#'+t){history.replaceState(null,'','#'+t);} window.scrollTo(0,0);}
+ document.querySelectorAll('[data-tab]').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.tab,true);});});
+ window.addEventListener('hashchange',function(){show(location.hash.slice(1),false);});
+ show((location.hash||'#overview').slice(1),false);
+ var grid=document.getElementById('cards'),filter='all',desc=false;
+ function apply(){var cs=[].slice.call(grid.querySelectorAll('.card')),n=0;
+  cs.sort(function(a,b){var ma=a.dataset.cat==='me',mb=b.dataset.cat==='me';if(ma!==mb)return ma?-1:1;
+   var pa=a.dataset.price,pb=b.dataset.price;if(pa===''&&pb==='')return 0;if(pa==='')return 1;if(pb==='')return -1;return desc?pb-pa:pa-pb;});
+  cs.forEach(function(c){grid.appendChild(c);var vis=filter==='all'||c.dataset.cat==='me'||c.dataset.cat===filter;c.classList.toggle('hide',!vis);if(vis&&c.dataset.cat!=='me')n++;});
+  document.getElementById('count').textContent=n+' competitor'+(n===1?'':'s')+' shown';}
+ document.querySelectorAll('[data-filter]').forEach(function(b){b.addEventListener('click',function(){filter=b.dataset.filter;
+  document.querySelectorAll('[data-filter]').forEach(function(x){x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',x===b);});apply();});});
+ var sb=document.getElementById('sort');sb.addEventListener('click',function(){desc=!desc;sb.setAttribute('aria-pressed',desc);
+  sb.querySelector('.lbl').textContent=desc?'Price: high → low':'Price: low → high';apply();});
+ apply();
+})();
+</script></body></html>
